@@ -1,0 +1,74 @@
+write tool
+
+
+idea:
+writing tool where at anytime can get a word (part of speech).
+
+
+data:
+adj- angry brave healthy little old red smart two some good big interesting
+noun- cat dog garden work music town teacher
+verb- run go have invite laughed listen playing singing walk (run ran running, eat ate eats eating eaten)
+adverb- badly fully hardly nearly never quickly silently well very really almost
+pronoun- he I its me my she that this those us who whom you
+articles- the, a, an prepositions- above before except from in near of since between upon with to at after on
+conjunctions- and or but so after before unless either neither because since
+interjections- gosh great hey hi hooray oh oops phew oh ouch no yes well aha ah ow
+
+
+what can it do:
+can add words
+can retrieve random word via parts of speech (or random)
+can retrieve all words
+can remove words
+can change background color, and font color, and interject JS can recognized known words in parts of speech
+can replace words
+
+save text to database (possibly encrypt, possibly authentication, password)
+
+statistics on text
+such as on
+http://expresso-app.org/
+
+rhyming words, using datamuse api
+http://www.datamuse.com/api/
+https://api.datamuse.com/words?rel_rhy=plan
+
+other word api's
+https://www.wordsapi.com/
+https://www.wordsapi.com/docs
+
+
+
+
+how:
+text input on space evaluate (or key up), backspace cancel, space confirm, ';' alternative, (maybe up / down for verb alternative, and can set past or present default etc.)
+';n' command to request noun
+';n+word' command add word to list
+';n-word' command remove word
+';n!' command get all nouns
+';r' command totally random word
+';color#000000' command hex color
+';bg#000000' command hex bg color
+
+
+database:
+file {title , text}
+words {
+adj, noun, verb {tenses}, adverb, pronoun, prepositions, conjunctions, interjections
+}
+
+
+MVP:
+type on webpage, get random word
+get random part of speech word
+save to text file
+add / remove words in data
+
+
+
+
+
+
+
+

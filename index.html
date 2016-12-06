@@ -4,30 +4,80 @@
 <title></title>
 <style>
 
-.mainContainer{
+body{
+  background-color: #777;
+}
 
+.mainContainer{
 }
 
 .textbox{
   height: 600px;
   font-size: 20px;
-
+  background-color: #fff;
+  border:3px solid #aaa;
+  border-style: inset;
 }
+
+.button1{
+  height:25px;
+  border-radius: 5px;
+  background-color: #8ac
+}
+
 
 </style>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="randomWords.js"></script>
 </head>
 <body>
 
-<script>
-</script>
 
 
 <div class="mainContainer">
+<button class="button1">run function</button>
 <div contenteditable="true" class="textbox"></div>
 </div>
 
 
+
+
+<script>
+
+
+var inputS = '';
+var inputA = [];
+
+function command(string){
+  var randNum = Math.floor(Math.random()*randWordArray.length)
+  return randWordArray[randNum];
+};
+
+
+document.querySelector('.button1').addEventListener("click", function(){
+  inputS = document.querySelector('.textbox').innerText;
+  inputA = inputS.split(' ');
+
+  for (var i = 0; i < inputA.length; i++) {
+    if(inputA[i][0] === ';'){
+      inputA[i] = command(inputA[i]);
+    }
+  }
+  document.querySelector('.textbox').innerText = inputA.join(' ');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 
 
 </body>

@@ -25,6 +25,12 @@ body{
   background-color: #8ac
 }
 
+.button2{
+  height:25px;
+  border-radius: 5px;
+  background-color: #8ac
+}
+
 
 </style>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -33,9 +39,9 @@ body{
 <body>
 
 
-
 <div class="mainContainer">
-<button class="button1">run function</button>
+<button class="button1">run function1</button>
+<button class="button2">run function2</button>
 <div contenteditable="true" class="textbox"></div>
 </div>
 
@@ -43,35 +49,104 @@ body{
 
 
 <script>
-
-
-var inputS = '';
+//global variables
 var inputA = [];
+var changedWords = [];
 
-function command(string){
+//object of command functions for organization
+// var commands = {};
+// commands.r = function(){};
+
+
+
+//return alternative word
+function randomWord(string){
   var randNum = Math.floor(Math.random()*randWordArray.length)
   return randWordArray[randNum];
 };
 
-
+//on button click
+//replaces words starting with a semicolon with calls function randomWord
 document.querySelector('.button1').addEventListener("click", function(){
-  inputS = document.querySelector('.textbox').innerText;
-  inputA = inputS.split(' ');
-
+  inputA = document.querySelector('.textbox').innerText.split(' ');
   for (var i = 0; i < inputA.length; i++) {
     if(inputA[i][0] === ';'){
-      inputA[i] = command(inputA[i]);
+      changedWords.push(inputA[i]);
+      inputA[i] = randomWord(inputA[i]);
     }
   }
   document.querySelector('.textbox').innerText = inputA.join(' ');
 });
 
 
+//on button2 click
+//
+document.querySelector('.button2').addEventListener("click", function(){
+  // document.querySelector('.textbox').innerText = inputA.join(' ');
+});
+
+
+//spacebar key will send last word to command function (starts with semicolon)
+document.addEventListener("keyup", function(event){
+  if(event.which === 32){
+    inputA = document.querySelector('.textbox').innerText.split(' ');
+    var lastWord = inputA[inputA.length-1];
+    if(lastWord[0]===';'){
+      console.log('command: ', lastWord); //sould have command function
+      inputA[inputA.length-1] = randomWord(); //for now just replace last word with random
+      command();
+      updateView(); //move to last thing
+    }
+  }
+});
 
 
 
 
+function command(string){
+  document.addEventListener("keyup", anotherCommand);
 
+
+};
+
+
+function anotherCommand(event){
+  console.log('second command: ', event.which);
+  if(event.which === 186){
+    inputA[inputA.length-1] = randomWord(); //for now just replace last word with random
+  } else {
+    document.removeEventListener("keyup", anotherCommand);
+  }
+  updateView();
+};
+
+
+
+//renders stored text to text field
+function updateView(){
+  document.querySelector('.textbox').innerText = inputA.join(' ');
+  placeCaretAtEnd( document.querySelector('.textbox') );
+};
+
+
+//moves cursor to end of text
+//takcen from http://stackoverflow.com/questions/4233265/contenteditable-set-caret-at-the-end-of-the-text-cross-browser
+function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(false);
+        textRange.select();
+    }
+}
 
 
 

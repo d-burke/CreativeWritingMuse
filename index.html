@@ -43,6 +43,7 @@ body{
 <button class="button1">run function1</button>
 <button class="button2">run function2</button>
 <div contenteditable="true" class="textbox"></div>
+<div class="infoDiv"></div>
 </div>
 
 
@@ -51,19 +52,12 @@ body{
 <script>
 //global variables
 var inputA = [];
-var changedWords = [];
-
-//object of command functions for organization
-// var commands = {};
-// commands.r = function(){};
+var commandLog = [];
 
 
 
-//return alternative word
-function randomWord(string){
-  var randNum = Math.floor(Math.random()*randWordArray.length)
-  return randWordArray[randNum];
-};
+//BUTTONS
+//buttons are for testing functionality before replacing their invocation with text commands
 
 //on button click
 //replaces words starting with a semicolon with calls function randomWord
@@ -71,31 +65,42 @@ document.querySelector('.button1').addEventListener("click", function(){
   inputA = document.querySelector('.textbox').innerText.split(' ');
   for (var i = 0; i < inputA.length; i++) {
     if(inputA[i][0] === ';'){
-      changedWords.push(inputA[i]);
+      commandLog.push(inputA[i]);
       inputA[i] = randomWord(inputA[i]);
     }
   }
   document.querySelector('.textbox').innerText = inputA.join(' ');
 });
 
-
 //on button2 click
-//
+//TODO: make function to toggle display command options
 document.querySelector('.button2').addEventListener("click", function(){
-  // document.querySelector('.textbox').innerText = inputA.join(' ');
+
+// $.get('https://api.datamuse.com/words?rel_rhy=plan', function(results){console.log(results)});
+//  console.log();
+var request = new Request('https://api.datamuse.com/words?rel_rhy=plan');
+console.log(request);
+fetch(request).then(function(response){
+console.log(response);});
+
 });
 
 
-//spacebar key will send last word to command function (starts with semicolon)
+
+
+
+//listens to key commands
+//spacebar key innitiates: if the last word starts with a semicolon then it will be treated as a command
 document.addEventListener("keyup", function(event){
   if(event.which === 32){
-    inputA = document.querySelector('.textbox').innerText.split(' ');
+    getText();
+    updateStats();
     var lastWord = inputA[inputA.length-1];
+    commandLog.push(lastWord);
     if(lastWord[0]===';'){
-      console.log('command: ', lastWord); //sould have command function
-      inputA[inputA.length-1] = randomWord(); //for now just replace last word with random
-      command();
-      updateView(); //move to last thing
+     // console.log('command: ', lastWord);
+      command(lastWord);
+      updateView();
     }
   }
 });
@@ -105,10 +110,10 @@ document.addEventListener("keyup", function(event){
 
 function command(string){
   document.addEventListener("keyup", anotherCommand);
-
+  //TODO:build out more commands
+  inputA[inputA.length-1] = randomWord(); //for now just replace last word with random word
 
 };
-
 
 function anotherCommand(event){
   console.log('second command: ', event.which);
@@ -122,6 +127,30 @@ function anotherCommand(event){
 
 
 
+
+//return alternative word
+function randomWord(string){
+  var randNum = Math.floor(Math.random()*randWordArray.length)
+  return randWordArray[randNum];
+};
+
+//updates stats at bottom of page
+function updateStats(){
+  getText();
+  var html = '';
+  html += 'Word count: ' + inputA.length;
+  //TODO: more stats, each word count, vocabulary size, etc.
+  document.querySelector('.infoDiv').innerHTML = html;
+  updateView();
+};
+
+//gets text from text field as a global array inputA
+function getText(){
+  //TODO: needs to be recoded to factor other white space ' ' && '\n' && '\t'
+  inputA = document.querySelector('.textbox').innerText.split(' ');
+};
+
+
 //renders stored text to text field
 function updateView(){
   document.querySelector('.textbox').innerText = inputA.join(' ');
@@ -130,7 +159,7 @@ function updateView(){
 
 
 //moves cursor to end of text
-//takcen from http://stackoverflow.com/questions/4233265/contenteditable-set-caret-at-the-end-of-the-text-cross-browser
+//taken from http://stackoverflow.com/questions/4233265/contenteditable-set-caret-at-the-end-of-the-text-cross-browser
 function placeCaretAtEnd(el) {
     el.focus();
     if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {

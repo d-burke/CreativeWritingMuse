@@ -27,15 +27,18 @@ body{
 }
 
 .button2{
-  height:25px;
-  border-radius: 5px;
-  background-color: #8ac;
+
 }
 
 .button3{
-  height:25px;
-  border-radius: 5px;
-  background-color: #8ac;
+  height: 26px;
+  display: block;
+}
+
+.inspire{
+  float: right;
+  width: 30%;
+  display:none;
 }
 
 .hideli{
@@ -46,6 +49,11 @@ body{
   display: none;
 }
 
+.magic{
+  height: 25px;
+  width:90%;
+  font-size: 16px;
+}
 
 
 </style>
@@ -71,12 +79,18 @@ https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeac
   <li><i>j;</i> - for adjective associated with that word (<i>;</i> - will repeat the command)</li>
   <li><i>delete/backspace</i> - to delete the word</li>
   <li><i>spacebar</i> - to accept the word</li>
+<button class="button2">inspiration mode</button>
 </ul>
 </div>
 
+<div class="inspire"><input class="magic"><button class="button3">run JavaScript</button>
+<h4>examples:</h4><p>$('body').css('background-color', '#f4d03f');</p></div>
+
 <button class="button1">commands</button>
 
+
 <div contenteditable="true" class="textbox"></div>
+
 
 <center><div class="mode"></div></center>
 <div class="infoDiv"></div>
@@ -106,6 +120,30 @@ document.querySelector('.button1').addEventListener("click", function(){
 });
 
 
+var inspirationMode = false;
+//button2 to toggle inspiration mode
+document.querySelector('.button2').addEventListener("click", function(){
+    // document.getElementsByClassName('textbox')[0].style.width='50%';
+
+  if(!inspirationMode){
+    document.getElementsByClassName('textbox')[0].style.width='65%';
+    inspirationMode = true;
+    document.getElementsByClassName('inspire')[0].style.display='block';
+    document.getElementsByClassName('button3')[0].addEventListener('click', function(event){
+      console.log(document.getElementsByClassName('magic')[0].value);
+      eval(document.getElementsByClassName('magic')[0].value);
+    });
+
+
+  } else {
+    document.getElementsByClassName('textbox')[0].style.width='';
+    inspirationMode = false;
+    document.getElementsByClassName('inspire')[0].style.display='none';
+  }
+
+
+});
+
 
 //listens to key commands
 //spacebar key innitiates: if the last word starts with a semicolon then it will be treated as a command
@@ -131,12 +169,6 @@ document.addEventListener("keyup", function(event){
 function command(string){
   lastWord = commandLog[commandLog.length-1].slice(1);
   document.addEventListener("keyup", anotherCommand);
-  // string = string.trim();
-  // if(string === ';rand' || string === ';'){
-  //   lastCommand = function(string){inputA[inputA.length-1] = randomWord();};
-  //   lastCommand(string);
-  //   updateView();
-  // }
 };
 
 

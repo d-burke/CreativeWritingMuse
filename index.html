@@ -6,6 +6,7 @@
 
 body{
   background-color: #ddd;
+
 }
 
 .mainContainer{
@@ -55,6 +56,9 @@ body{
   font-size: 16px;
 }
 
+.background{
+
+}
 
 </style>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -67,6 +71,7 @@ chrome extension to disable CORS
 https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
 -->
 
+<div class="background"></div>
 <div class="mainContainer">
 
 <div class="instructions">
@@ -84,7 +89,14 @@ https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeac
 </div>
 
 <div class="inspire"><input class="magic"><button class="button3">run JavaScript</button>
-<h4>examples:</h4><p>$('body').css('background-color', '#f4d03f');</p></div>
+<h4>examples:</h4>
+<p>$('body').css('background-color', '#f4d03f');</p>
+<p>$('body').css('background-image', 'url("https://i.ytimg.com/vi/fbpK5RPCpUg/maxresdefault.jpg")');</p>
+<p>$('body').css('color', '#1ff11f');</p>
+<p>$('body').css('text-shadow', '4px 3px 5px #000000');</p>
+
+
+</div>
 
 <button class="button1">commands</button>
 

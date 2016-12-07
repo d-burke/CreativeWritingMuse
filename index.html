@@ -54,26 +54,30 @@ body{
 </head>
 <body>
 
+<!--
+chrome extension to disable CORS
+https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
+-->
+
 <div class="mainContainer">
 
 <div class="instructions">
 <h3>Commands:</h3>
-;word and <i>spacebar</i> - to begin
+<i>;word</i> and <i>spacebar</i> - to begin
 <ul class="hideli">
-  <li>x; - for random word (; - will repeat the command)</li>
-  <li>s; - for similar meaning word (; - will repeat the command)</li>
-  <li>r; - for rhyming word (; - will repeat the command)</li>
-  <li>j; - for adjective associated with that word (; - will repeat the command)</li>
+  <li><i>x;</i> - for random word (<i>;</i> - will repeat the command)</li>
+  <li><i>s;</i> - for similar meaning word (<i>;</i> - will repeat the command)</li>
+  <li><i>r;</i> - for rhyming word (<i>;</i> - will repeat the command)</li>
+  <li><i>j;</i> - for adjective associated with that word (<i>;</i> - will repeat the command)</li>
   <li><i>delete/backspace</i> - to delete the word</li>
   <li><i>spacebar</i> - to accept the word</li>
 </ul>
 </div>
 
 <button class="button1">commands</button>
-<button class="button2">run function2</button>
-<button class="button3">run function3</button>
 
 <div contenteditable="true" class="textbox"></div>
+
 <div class="infoDiv"></div>
 </div>
 
@@ -81,10 +85,6 @@ body{
 
 
 <script>
-//needs like the following chrome extension to disable CORS
-//https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
-
-
 
 //global variables
 var inputA = []; //input field text as an array
@@ -103,23 +103,6 @@ document.querySelector('.button1').addEventListener("click", function(){
     document.getElementsByClassName('instructions')[0].style.display='block';
   }
 });
-
-
-//on button2 click
-//TODO: make function to toggle display command options
-document.querySelector('.button2').addEventListener("click", function(){
-
-
-
-
-});
-
-
-
-
-
-
-
 
 
 
@@ -147,14 +130,12 @@ document.addEventListener("keyup", function(event){
 function command(string){
   lastWord = commandLog[commandLog.length-1].slice(1);
   document.addEventListener("keyup", anotherCommand);
-  //TODO:build out more commands
-  string = string.trim();
-  if(string === ';rand' || string === ';'){
-    lastCommand = function(string){inputA[inputA.length-1] = randomWord();};
-    lastCommand(string);
-    updateView();
-
-  }
+  // string = string.trim();
+  // if(string === ';rand' || string === ';'){
+  //   lastCommand = function(string){inputA[inputA.length-1] = randomWord();};
+  //   lastCommand(string);
+  //   updateView();
+  // }
 };
 
 
@@ -190,12 +171,6 @@ function anotherCommand(event){
 
 
 
-
-
-
-
-
-
 //call api for similar meaning words
 function apiCallSim(string){
   $.getJSON('https://api.datamuse.com/words?ml='+string)
@@ -224,19 +199,23 @@ function apiCallRhy(string){
 }
 
 
-//return alternative word
+
+//return alternative word from
 function randomWordBank(){
+  if(!wordBank.length) {
+    console.log('no words attained from api');
+  }
   var randNum = Math.floor(Math.random()*wordBank.length)
   return wordBank[randNum]['word'];
 };
-
-
 
 //return alternative word
 function randomWord(string){
   var randNum = Math.floor(Math.random()*randWordArray.length)
   return randWordArray[randNum];
 };
+
+
 
 //updates stats at bottom of page
 //TODO: maybe more stats?
@@ -251,7 +230,7 @@ function updateStats(){
     else {textO[word]++;}
   }
 
-  //vocab count, and word count string
+  //html string of vocab count, and each word count
   var totalWords = 0;
   var vocab = 0;
   var wordCountS = '<ul>';
@@ -264,15 +243,16 @@ function updateStats(){
   }
   wordCountS += '</ul>';
 
-  //html string
+  //compose final html string to display
   var html = '';
   html += '<p>Word count: ' + totalWords + '</p>';
   html += 'Vocabulary: ' + vocab;
   html += wordCountS;
 
-  //print stats
+  //displays stats
   document.querySelector('.infoDiv').innerHTML = html;
 };
+
 
 //gets text from text field as a global array inputA
 function getText(){
@@ -305,10 +285,6 @@ function placeCaretAtEnd(el) {
         textRange.select();
     }
 }
-
-
-
-
 
 </script>
 

@@ -141,14 +141,11 @@ document.addEventListener("keyup", function(event){
   if(event.which === 32){
     updateStats();
     getText();
-    lastWord = inputA[inputA.length-1].trim();
+    var lastWord = inputA[inputA.length-1].trim();
     //TODO: some bug with ';' at the start of a newline?
     commandLog.push(lastWord);
     if(lastWord[0]===';'){
-      document.querySelector('.textbox').innerText = document.querySelector('.textbox').innerText.slice(0, document.querySelector('.textbox').innerText.length-1);
-      placeCaretAtEnd(document.querySelector('.textbox'));
-
-      console.log('command: ', lastWord);
+     console.log('command: ', lastWord);
       command(lastWord);
     }
   }
@@ -158,16 +155,16 @@ document.addEventListener("keyup", function(event){
 
 
 function command(string){
-  lastWord = commandLog[commandLog.length-1].slice(1);
+  lastCommand = undefined;
   document.addEventListener("keyup", anotherCommand);
   //TODO:build out more commands
-  string = string.trim();
+  string = string.trim().slice(1);
   // console.log('string, "'+string+'"');
-  if(string === ';rand' || string === ';'){
+  lastWord = string;
+  if(string === 'rand' || string === ''){
     lastCommand = function(string){inputA[inputA.length-1] = randomWord();};
     lastCommand(string);
     updateView();
-
   }
   // else {
   //   wordbank = apiCall(string);
@@ -178,28 +175,25 @@ function command(string){
 
 function anotherCommand(event){
   console.log('second command: ', event.which);
-  console.log('lastWord: ', lastWord);
   if(event.which === 32){
     document.removeEventListener("keyup", anotherCommand);
   } else if(event.which === 186){ //';'
-    lastCommand();
-  } else if(event.which === 88){ //'x'
-    lastCommand = function(string){inputA[inputA.length-1] = randomWord();lastWord = inputA[inputA.length-1];};
+    randomBank=randomWordBank;
+
+    lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();};
+    lastCommand(lastWord);
   } else if(event.which === 8){ //del
     inputA[inputA.length-1]='';
     document.removeEventListener("keyup", anotherCommand);
   } else if(event.which === 82){ // 'r'
-    console.log(commandLog[commandLog.length-1]);
-    apiCallRhy(lastWord);
-    lastCommand = function(string){inputA[inputA.length-1] = randomWordBank(); lastWord = inputA[inputA.length-1];};
-  } else if(event.which === 74){ // 'j'
-    console.log(commandLog[commandLog.length-1]);
-    apiCallAdj(lastWord);
-    lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();lastWord = inputA[inputA.length-1];};
-  } else if(event.which === 83){ // 's'
-    console.log(commandLog[commandLog.length-1]);
-    apiCallSim(lastWord);
+    apiCallRhy(commandLog[commandLog.length-1].slice(1));
     lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();};
+    lastCommand(lastWord);
+  } else if(event.which === 74){ // 'j'
+    apiCallAdj(commandLog[commandLog.length-1].slice(1));
+    lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();};
+    lastCommand(lastWord);
+
   } else {
     document.removeEventListener("keyup", anotherCommand);
   }
@@ -209,21 +203,7 @@ function anotherCommand(event){
 
 
 
-
-
-
-
-
-//call api for similar words
-function apiCallSim(string){
-  $.getJSON('https://api.datamuse.com/words?ml='+string)
-  .then(function(response){
-    console.log(response);
-    wordBank = response;
-  });
-}
-
-//call api for adjective for given noun
+//call api for noun
 function apiCallAdj(string){
   $.getJSON('https://api.datamuse.com/words?rel_jjb='+string)
   .then(function(response){
@@ -231,6 +211,8 @@ function apiCallAdj(string){
     wordBank = response;
   });
 }
+
+
 
 //call api for rhyme
 function apiCallRhy(string){

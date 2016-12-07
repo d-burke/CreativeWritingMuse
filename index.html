@@ -5,7 +5,7 @@
 <style>
 
 body{
-  background-color: #777;
+  background-color: #ddd;
 }
 
 .mainContainer{
@@ -78,6 +78,7 @@ https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeac
 
 <div contenteditable="true" class="textbox"></div>
 
+<center><div class="mode"></div></center>
 <div class="infoDiv"></div>
 </div>
 
@@ -143,27 +144,33 @@ function anotherCommand(event){
   console.log('second command: ', event.which);
   console.log('lastWord: ', lastWord);
   if(event.which === 32){
+    document.querySelector('.mode').innerHTML='';
     document.removeEventListener("keyup", anotherCommand);
   } else if(event.which === 186){ //';'
     lastCommand();
   } else if(event.which === 88){ //'x'
     lastCommand = function(string){inputA[inputA.length-1] = randomWord();lastWord = inputA[inputA.length-1];};
+    document.querySelector('.mode').innerHTML='Mode: random';
   } else if(event.which === 8){ //del
     inputA[inputA.length-1]='';
     document.removeEventListener("keyup", anotherCommand);
   } else if(event.which === 82){ // 'r'
     console.log(commandLog[commandLog.length-1]);
     apiCallRhy(lastWord);
+    document.querySelector('.mode').innerHTML='Mode: rhyme';
     lastCommand = function(string){inputA[inputA.length-1] = randomWordBank(); lastWord = inputA[inputA.length-1];};
   } else if(event.which === 74){ // 'j'
     console.log(commandLog[commandLog.length-1]);
     apiCallAdj(lastWord);
+    document.querySelector('.mode').innerHTML='Mode: adjective';
     lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();lastWord = inputA[inputA.length-1];};
   } else if(event.which === 83){ // 's'
     console.log(commandLog[commandLog.length-1]);
     apiCallSim(lastWord);
+    document.querySelector('.mode').innerHTML='Mode: similar';
     lastCommand = function(string){inputA[inputA.length-1] = randomWordBank();};
   } else {
+    document.querySelector('.mode').innerHTML='';
     document.removeEventListener("keyup", anotherCommand);
   }
   updateView();

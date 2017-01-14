@@ -1,8 +1,5 @@
-# CreativeWritingMuse
-2-day hackathon project
-
-                           ## Creative Writing Muse: ##
-                      ## In Bowser Creative Writing Tool ##
+# Creative Writing Muse: #
+## In Bowser Creative Writing Tool ##
 
 ## Summary: ##
 Creative writers who suffer writer's block or want a creativity boost will benefit with the tools the program includes.
